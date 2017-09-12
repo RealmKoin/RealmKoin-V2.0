@@ -20,18 +20,27 @@ pragma solidity ^0.4.11;
 // Usage Extended To Public At A Later Date.
 
 contract RealmKoin_Donations {
+    address public Stat_Signature;
+    uint public Total_Ions;
+    uint public Active_Ions;
     address public Donations_Contract;
     bool public Donations_Contract_Set;
     bool private do_nothing;
     uint256 public Donations;
     uint256 public Total_Donations;
 
+
     struct network_data {
         bool Ion;
         bool Stat;
     }
+
+    struct ion_data {
+        address Ion_Signature;
+    }
     
     mapping(address => network_data) public Network;
+    mapping(uint => ion_data) public Ion_Data;
 
     event Donation_Sent(address _AdminSig, address _To, uint _MsgValue);
     event Donated(address _AdminSig, address _To, uint _MsgValue);
@@ -43,8 +52,10 @@ contract RealmKoin_Donations {
     event MsgValue_Accepted(address _MsgValueSender);
     event Donations_Unavailable(address _Admin, uint256 _Donations);
     event Not_On_Network(address _CallerSig);
+    event Stat_Only_Option(address _CallerSig);
     event Ion_Linked(address _NewIonSig);
     event Ion_UnLinked(address _RemovedIonSig);
+    event Stat_Assigned(address _OldStat, address _NewStat);
 
     modifier Is_Sender_Ion() {
         if (Network[msg.sender].Ion != true) {
@@ -56,7 +67,7 @@ contract RealmKoin_Donations {
     modifier Is_Sender_Stat() {
         if (Network[msg.sender].Stat != true) {
             do_nothing = true;
-            Not_On_Network(msg.sender);
+            Stat_Only_Option(msg.sender);
         }
         _;
     }
@@ -92,9 +103,18 @@ contract RealmKoin_Donations {
     function RealmKoin_Donations(address _Stat) {
         Donations = 0;
         Total_Donations = 0;
+        Total_Ions = 0;
+        Active_Ions = 0;
         Donations_Contract_Set = false;
+        Stat_Signature = _Stat;
         Network[msg.sender].Ion = true;
+        Ion_Data[Total_Ions].Ion_Signature = msg.sender;
+        Total_Ions += 1;
+        Active_Ions += 1;
         Network[_Stat].Ion = true;
+        Ion_Data[Total_Ions].Ion_Signature = _Stat;
+        Total_Ions += 1;
+        Active_Ions += 1;
         Network[_Stat].Stat = true;
         do_nothing = false;
     }
@@ -111,6 +131,9 @@ contract RealmKoin_Donations {
      else
      {
          Network[_NewIon].Ion = true;
+         Ion_Data[Total_Ions].Ion_Signature = _NewIon;
+         Total_Ions += 1;
+         Active_Ions += 1;
          Ion_Linked(_NewIon);
          return true;
      }
@@ -128,6 +151,7 @@ contract RealmKoin_Donations {
      else
      {
         Network[_IonSig].Ion = false;
+        Active_Ions -= 1;
         Ion_UnLinked(_IonSig);
         return true;
      }
@@ -177,6 +201,27 @@ contract RealmKoin_Donations {
         return true;
      }
     }
+    function Assign_Stat(address _NewStat)
+     public payable
+     MsgValue()
+     Is_Sender_Stat()
+     returns (bool success)
+     {
+         if (do_nothing == true) {
+             do_nothing = false;
+             return false;
+         }
+         else
+         {
+             Network[msg.sender].Stat = false;
+             Network[msg.sender].Ion = false;
+             Stat_Signature = _NewStat;
+             Network[_NewStat].Stat = true;
+             Network[_NewStat].Ion = true;
+             Stat_Assigned(msg.sender, _NewStat);
+             return true;
+         }
+     }
     
     function Disengage(address _Beneficiary) public 
      Is_Sender_Stat()
@@ -190,6 +235,7 @@ contract RealmKoin_Donations {
       else
       {
           selfdestruct(_Beneficiary);
+          return true;
       }
      }
     function() payable 
