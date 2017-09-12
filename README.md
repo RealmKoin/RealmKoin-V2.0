@@ -1,3 +1,5 @@
+![RealmKoin Logo](https://avatars2.githubusercontent.com/u/14884318?v=4&u=ad39ca77cfeeb9017dcf5bcf54c3982fdfaee612&s=400)
+
 # RealmKoin-V2.0
 Newly Updated Contracts For RealmKoin Network
 
@@ -30,6 +32,6 @@ Newly Updated Contracts For RealmKoin Network
  
 ## Phase 3: Beta Testing: RealmKoin Account/Token Management Wallet & Crowdsale Controller
 
-https://avatars2.githubusercontent.com/u/14884318?v=4&u=ad39ca77cfeeb9017dcf5bcf54c3982fdfaee612&s=400
+
 
 ## Phase 4: Community Response : 
