@@ -1,8 +1,7 @@
 # RealmKoin-V2.0
 Newly Updated Contracts For RealmKoin Network
 
-RealmKoin Network includes the following contracts (as Ionic attachments) during Phase 2: Alpha Testing. 
-RealmKoin Account/Token Management Wallet & Crowdsale Controller will be Posted marking Phase 3: Beta Testing.
+## Phase 2: Alpha Testing: RealmKoin Network includes the following contracts (as Ionic attachments) 
 
 ### [Refund Contract](./RealmKoin_Refund.sol) :
   
@@ -22,3 +21,5 @@ RealmKoin Account/Token Management Wallet & Crowdsale Controller will be Posted 
   Stat: None
   ```
  
+## Phase 3: Beta Testing: RealmKoin Account/Token Management Wallet & Crowdsale Controller
+
