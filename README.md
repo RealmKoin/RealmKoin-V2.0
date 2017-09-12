@@ -4,7 +4,7 @@ New Updated Contracts For RealmKoin Network
 RealmKoin Network Is Currently In Testing Phase. The Following Contracts Are Attachments.
 RealmKoin Token Management & Crowd Sale Controller Will Be Posted At The End Of Said Phase Post Deployment.
 
-~ [Refund Contract](./RealmKoin_Refund.sol) :
+### [Refund Contract](./RealmKoin_Refund.sol) :
   
   ```
   Details: Refund Contract For Crowd Sale / Token Management System.
@@ -13,7 +13,7 @@ RealmKoin Token Management & Crowd Sale Controller Will Be Posted At The End Of 
   Stat: None
   ```
   
-~ [Donation Contract](./RealmKoin_Donation.sol) :
+### [Donation Contract](./RealmKoin_Donation.sol) :
   
   ```
   Details: Donations Setup For RealmKoin Network And Affiliates.
