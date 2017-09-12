@@ -10,7 +10,7 @@ pragma solidity ^0.4.11;
 // (* Any And All Revised Future Editorials Of T.G.L Apply From 1/1/2017 To Date.)
 // RealmKoin Ethereum Refund Smart Contract.
 // Smart Contract That Has 0 Authorization To The RealmKoin Network. 
-// Sends Ethereum From Funds / Donations Account To Specified Address
+// Sends Ethereum From Refunds / Donations Account To Specified Address
 // Appendable Ion For Network Connections.
 // Ion Refund // Collect Donations Functions.
 // RealmKoin Network Contracts Are Public And RealmKoin Team Deployed ONLY.
@@ -22,11 +22,14 @@ pragma solidity ^0.4.11;
 // Contract Definition Below:
 contract RealmKoin_Refund {
     address public Donations_Contract;
+    address public Stat_Signature;
+    uint public Total_Ions;
+    uint public Active_Ions;
     bool public Donations_Contract_Set;
     bool private do_nothing;
     uint256 public Donations;
     uint256 public Total_Donations;
-    uint256 public Funds;
+    uint256 public Refunds;
 
 // Structures Below:
     struct network_data {
@@ -34,23 +37,29 @@ contract RealmKoin_Refund {
         bool Stat;
     }
 
+    struct ion_data {
+        address Ion_Signature;
+    }
+
 // Mappings Below: 
     mapping(address => network_data) public Network;
+    mapping(uint => ion_data) public Ion_Data;
 
 // Events Below:
     event Donations_Withdrawn(address _IonSig, address _To, uint _MsgValue);
     event Refunded(address _To, uint _MsgValue);
     event Donation_Received(address _SenderSig, uint _MsgValue);
     event Set_Donations_Address(address _IonSig, address _DonationAddress);
-    event Funds_Added(address _SenderSig, uint256 _MsgValue);
+    event Refunds_Accepted(address _SenderSig, uint256 _MsgValue);
     event MsgValue_Needed(address _CallerSig);
     event MsgValue_Accepted(address _MsgValueSender);
-    event Funds_Unavailable(address _IonSig, uint256 _Funds);
+    event Refunds_Unavailable(address _IonSig, uint256 _Refunds);
     event Donations_Unavailable(address _IonSig, uint256 _Donations);
     event Not_On_Network(address _CallerSig);
     event Stat_Only_Option(address _CallerSig);
     event Ion_Linked(address _IonLinked);
     event Ion_UnLinked(address _IonUnlinked);
+    event Stat_Assigned(address _OldStat, address _NewStat);
 
 // Modifiers Below:
     modifier Is_Sender_Ion() {
@@ -74,10 +83,10 @@ contract RealmKoin_Refund {
         }
         _;
     }
-    modifier Are_Funds_Available(uint256 _value) {
-        if (Funds < _value) {
+    modifier Are_Refunds_Available(uint256 _value) {
+        if (Refunds < _value) {
             do_nothing = true;
-            Funds_Unavailable(msg.sender, Funds);
+            Refunds_Unavailable(msg.sender, Refunds);
         }
         _;
     }
@@ -101,11 +110,19 @@ contract RealmKoin_Refund {
     function RealmKoin_Refund(address _Stat) {
         Donations = 0;
         Total_Donations = 0;
-        Funds = 0;
+        Refunds = 0;
+        Total_Ions = 0;
+        Active_Ions = 0;
         Donations_Contract_Set = false;
         Network[msg.sender].Ion = true;
+        Ion_Data[Total_Ions].Ion_Signature = msg.sender;
+        Total_Ions += 1;
+        Active_Ions += 1;
         Network[_Stat].Ion = true;
         Network[_Stat].Stat = true;
+        Ion_Data[Total_Ions].Ion_Signature = _Stat;
+        Total_Ions += 1;
+        Active_Ions += 1;
         do_nothing = false;
     }
     function Link_Ion(address _NewIon) public payable
@@ -121,6 +138,9 @@ contract RealmKoin_Refund {
      else
      {
          Network[_NewIon].Ion = true;
+         Ion_Data[Total_Ions].Ion_Signature = _NewIon;
+         Total_Ions += 1;
+         Active_Ions += 1;
          Ion_Linked(_NewIon);
          return true;
      }
@@ -138,12 +158,13 @@ contract RealmKoin_Refund {
      else
      {
         Network[_IonName].Ion = false;
+        Active_Ions -= 1;
         Ion_UnLinked(_IonName);
         return true;
      }
     }
     
-    function Fill_Funds() public payable
+    function Fill_Refunds() public payable
      Is_Sender_Ion()
      Value_Needed()
      returns (bool success)
@@ -155,8 +176,8 @@ contract RealmKoin_Refund {
      }
      else
      {
-        Funds += msg.value;
-        Funds_Added(msg.sender, msg.value);
+        Refunds += msg.value;
+        Refunds_Accepted(msg.sender, msg.value);
         return true;
      }
     }
@@ -165,7 +186,7 @@ contract RealmKoin_Refund {
     function Refund(address _to, uint256 _value) public payable
      MsgValue()
      Is_Sender_Ion()
-     Are_Funds_Available(_value)
+     Are_Refunds_Available(_value)
      returns (bool sucess)
     {
      if (do_nothing == true)
@@ -181,7 +202,7 @@ contract RealmKoin_Refund {
         else
         {
             Refunded(_to, _value);
-            Funds -= _value;
+            Refunds -= _value;
             return true;
         }
      }
@@ -230,6 +251,28 @@ contract RealmKoin_Refund {
         return true;
      }
     }
+
+    function Assign_Stat(address _NewStat)
+     public payable
+     MsgValue()
+     Is_Sender_Stat()
+     returns (bool success)
+     {
+         if (do_nothing == true) {
+             do_nothing = false;
+             return false;
+         }
+         else
+         {
+             Network[msg.sender].Stat = false;
+             Network[msg.sender].Ion = false;
+             Stat_Signature = _NewStat;
+             Network[_NewStat].Stat = true;
+             Network[_NewStat].Ion = true;
+             Stat_Assigned(msg.sender, _NewStat);
+             return true;
+         }
+     }
     
     function Disengage(address _Beneficiary) public 
      Is_Sender_Stat()
