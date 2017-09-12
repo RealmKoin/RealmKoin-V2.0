@@ -2,7 +2,7 @@
 Newly Updated Contracts For RealmKoin Network
 
 | Phase |       Title         | Check |
-| ----- |:-------------------:| -----:|
+| ----- |:-------------------:| :----:|
 |   1   | Research            |  [x]  |
 |   2   | Alpha Testing       |  [x]  |
 |   3   | Beta Testing        |  [ ]  |
