@@ -1,5 +1,11 @@
 # RealmKoin-V2.0
 Newly Updated Contracts For RealmKoin Network
+| Phase |       Title         | Check |
+| ----- |:-------------------:| -----:|
+|   1   | Research            |  [x]  |
+|   2   | Alpha Testing       |  [x]  |
+|   3   | Beta Testing        |  [ ]  |
+|   4   | Community Response  |  [ ]  |
 
 ## Phase 2: Alpha Testing: RealmKoin Network includes the following contracts (as Ionic attachments) 
 
