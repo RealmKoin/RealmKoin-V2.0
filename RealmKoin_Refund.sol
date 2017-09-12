@@ -50,7 +50,7 @@ contract RealmKoin_Refund {
     event Not_On_Network(address _CallerSig);
     event Stat_Only_Option(address _CallerSig);
     event Ion_Linked(address _IonLinked);
-    event Ion_Unlinked(address _IonUnlinked);
+    event Ion_UnLinked(address _IonUnlinked);
 
 // Modifiers Below:
     modifier Is_Sender_Ion() {
@@ -108,7 +108,7 @@ contract RealmKoin_Refund {
         Network[_Stat].Stat = true;
         do_nothing = false;
     }
-    function Add_Ion(address _NewIon) public payable
+    function Link_Ion(address _NewIon) public payable
      MsgValue()
      Is_Sender_Stat() 
      returns (bool sucess)
@@ -125,7 +125,7 @@ contract RealmKoin_Refund {
          return true;
      }
     }
-    function Remove_Ion(address _IonName) public payable
+    function Unlink_Ion(address _IonName) public payable
      MsgValue()
      Is_Sender_Stat()
      returns (bool success)
@@ -138,7 +138,7 @@ contract RealmKoin_Refund {
      else
      {
         Network[_IonName].Ion = false;
-        Ion_Linked(_IonName);
+        Ion_UnLinked(_IonName);
         return true;
      }
     }
