@@ -1,5 +1,4 @@
-![RealmKoin Logo](https://avatars2.githubusercontent.com/u/14884318?v=4&u=ad39ca77cfeeb9017dcf5bcf54c3982fdfaee612&s=100&a='right')
-# RealmKoin-V2.0
+# RealmKoin-V2.0 ![RealmKoin Logo](https://avatars2.githubusercontent.com/u/14884318?v=4&u=ad39ca77cfeeb9017dcf5bcf54c3982fdfaee612&s=80)
 Newly Updated Contracts For RealmKoin Network
 
 | Phase |       Title         | Check |
